@@ -2,7 +2,6 @@ const Question = require('../models/Question');
 const Poll = require('../models/Poll')
 const Vote = require('../models/Vote');
 
-
 // Create a new poll
 exports.createPoll = async (req, res) => {
   // Check if the request body contains the required fields
