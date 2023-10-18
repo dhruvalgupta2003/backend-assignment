@@ -1,39 +1,48 @@
-const mysql = require('mysql2/promise');
+const sql = require('../db/db');
 
-class Question {
-  static async create(pollId, question_text, question_type) {
-    // Implement the logic to create a new question in the database
-    try {
-      const [results] = await connection.execute(
-        'INSERT INTO poll_questions (poll_id, question_text, question_type) VALUES (?, ?, ?)',
-        [pollId, question_text, question_type]
-      );
+const Question = function (question) {
+  this.pollId = question.pollId;
+  this.questionText = question.questionText;
+  this.questionType = question.questionType;
+};
 
-      return results.insertId;
-    } catch (error) {
-      throw error;
-    } finally {
-      connection.close();
+Question.create = (newQuestion, result) => {
+  sql.query(
+    'INSERT INTO questions (poll_id, question_text, question_type) VALUES (?, ?, ?)',
+    [newQuestion.pollId, newQuestion.questionText, newQuestion.questionType],
+    (err, res) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+      result(null, { id: res.insertId });
     }
-  }
+  );
+};
 
-  static async update(questionId, question_text, question_type) {
-    // Implement the logic to update a question in the database
-    const connection = await mysql.createConnection({ host: 'your_host', user: 'your_user', password: 'your_password', database: 'your_database' });
+Question.getQuestionSetsForPoll = (pollId, result) => {
+    sql.query('SELECT * FROM questions WHERE poll_id = ?', pollId, (err, res) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+      result(null, res);
+    });
+  };
+  
 
-    try {
-      await connection.execute(
-        'UPDATE poll_questions SET question_text = ?, question_type = ? WHERE id = ?',
-        [question_text, question_type, questionId]
-      );
-
-      return true;
-    } catch (error) {
-      throw error;
-    } finally {
-      connection.close();
-    }
-  }
-}
+  Question.getFirstQuestionForPoll = (pollId, result) => {
+    sql.query('SELECT * FROM questions WHERE poll_id = ? LIMIT 1', pollId, (err, res) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+      if (res.length > 0) {
+        result(null, res[0]);
+      } else {
+        result(null, null);
+      }
+    });
+  };
 
 module.exports = Question;

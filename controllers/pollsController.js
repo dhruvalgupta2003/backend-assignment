@@ -41,7 +41,7 @@ exports.getAllPolls = async (req, res) => {
       // Iterate through each poll to gather additional information
       for (const poll of polls) {
         // Get the total number of votes for the poll
-        const totalVotes = await Vote.getTotalVotesForPoll(poll.id);
+        const totalVotes = await Vote.getVotesForPoll(poll.id);
   
         // Get the number of question sets in the poll
         const questionSets = await Question.getQuestionSetsForPoll(poll.id);
@@ -86,7 +86,7 @@ exports.updatePoll = async (req, res) => {
   }
 };
 
-// Fetch user polls and serve questions
+
 // Fetch user polls and serve questions
 exports.getUserPollsAndQuestions = async (req, res) => {
   try {

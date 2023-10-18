@@ -1,25 +1,29 @@
-// models/vote.js
-const db = require('../db/db');
+const sql = require('../db/db');
 
-class Vote {
-  static create(userId, pollId, questionId, optionId) {
-    return new Promise((resolve, reject) => {
-      db.query('INSERT INTO votes (user_id, poll_id, question_id, option_id) VALUES (?, ?, ?, ?)', [userId, pollId, questionId, optionId], (error, results) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results.insertId);
-        }
-      });
-    });
-  }
+const Vote = function(vote) {
+  this.pollId = vote.pollId;
+  this.userId = vote.userId;
+  this.vote = vote.vote;
+};
 
-  static calculateRewards(userId) {
-    return new Promise((resolve, reject) => {
-      // Implement the logic to calculate rewards based on user's votes
-      // Query the database and return the rewards information
-    });
-  }
-}
+Vote.create = (newVote, result) => {
+  sql.query('INSERT INTO votes SET ?', newVote, (err, res) => {
+    if (err) {
+      result(err, null);
+      return;
+    }
+    result(null, { id: res.insertId });
+  });
+};
+
+Vote.getVotesForPoll = (pollId, result) => {
+  sql.query('SELECT * FROM votes WHERE pollId = ?', pollId, (err, res) => {
+    if (err) {
+      result(err, null);
+      return;
+    }
+    result(null, res);
+  });
+};
 
 module.exports = Vote;

@@ -1,56 +1,52 @@
-// controllers/questionController.js
+const Question = require('./question.model');
 
-const Question = require('../models/Question');
-
-// Update a particular question set within a poll
-exports.updateQuestionSet = async (req, res) => {
-  try {
-    const { pollId, questionId } = req.params;
-    const { question_text, options, question_type } = req.body;
-
-    // Check if the poll exists
-    const poll = await Poll.getById(pollId);
-
-    if (!poll) {
-      return res.status(404).json({ error: 'Poll not found' });
-    }
-
-    // Check if the question set exists within the specified poll
-    const questionSet = await Question.getById(pollId, questionId);
-
-    if (!questionSet) {
-      return res.status(404).json({ error: 'Question set not found in the poll' });
-    }
-
-    // Update the question set's details based on the parameters provided in the request body
-    const updatedQuestionSet = {};
-
-    if (question_text) {
-      updatedQuestionSet.question_text = question_text;
-    }
-
-    if (options) {
-      updatedQuestionSet.options = options;
-    }
-
-    if (question_type) {
-      updatedQuestionSet.question_type = question_type;
-    }
-
-    await Question.update(pollId, questionId, updatedQuestionSet);
-
-    res.status(200).json({ message: 'Question set updated successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+// Create a new question
+exports.createQuestion = (req, res) => {
+  // Check if the request body contains the required fields
+  if (!req.body.pollId || !req.body.questionText || !req.body.questionType) {
+    return res.status(400).json({ success: false, message: 'All fields are required' });
   }
+
+  // Create a new question object
+  const newQuestion = new Question({
+    pollId: req.body.pollId,
+    questionText: req.body.questionText,
+    questionType: req.body.questionType,
+  });
+
+  // Call the create method from the model
+  Question.create(newQuestion, (err, data) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Error creating question', error: err });
+    }
+    res.status(201).json({ success: true, message: 'Question created successfully', data: { questionId: data.id } });
+  });
 };
 
-
-exports.getUserQuestions = async (req, res) => {
-    try {
-      // Implement the logic to fetch questions for a user
-    } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  };
+// Fetch all question sets for a specific poll
+exports.getQuestionSetsForPoll = (req, res) => {
+    const pollId = req.params.pollId;
   
+    Question.getQuestionSetsForPoll(pollId, (err, questionSets) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Error fetching question sets', error: err });
+      }
+      res.status(200).json({ success: true, data: { questionSets } });
+    });
+  };
+
+// Fetch the first question for a specific poll
+exports.getFirstQuestionForPoll = (req, res) => {
+  const pollId = req.params.pollId;
+
+  Question.getFirstQuestionForPoll(pollId, (err, question) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Error fetching the first question', error: err });
+    }
+    if (question) {
+      res.status(200).json({ success: true, data: { question } });
+    } else {
+      res.status(404).json({ success: false, message: 'No questions found for the poll' });
+    }
+  });
+};

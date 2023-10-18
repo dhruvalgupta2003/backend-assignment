@@ -5,6 +5,7 @@ const cors = require('cors');
 const db = require('./db/db');
 require('dotenv').config();
 const pollRoutes = require('./routes/pollRoutes');
+const voteRoutes = require('./routes/voteRoutes')
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -29,3 +30,4 @@ db.connect((err) => {
   
 // API routes
 app.use('/api', pollRoutes);
+app.use('/api',voteRoutes);

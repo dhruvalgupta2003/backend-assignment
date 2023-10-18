@@ -1,17 +1,37 @@
-const Vote = require('../models/Vote');
+const Vote = require('../models/Vote'); // Import the Vote model
 
-exports.submitVote = async (req, res) => {
-  try {
-    // Implement the logic to submit a vote and calculate rewards
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+// Create a new vote
+exports.createVote = async (req, res) => {
+  // Check if the request body contains the required fields
+  if (!req.body.pollId || !req.body.userId || req.body.vote === undefined) {
+    return res.status(400).json({ success: false, message: 'All fields are required' });
   }
+  
+  // Create a new vote object
+  const newVote = new Vote({
+    pollId: req.body.pollId,
+    userId: req.body.userId,
+    vote: req.body.vote,
+  });
+
+  // Call the create method from the model
+  Vote.create(newVote, (err, data) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Error creating vote', error: err });
+    }
+    res.status(201).json({ success: true, message: 'Vote created successfully', data: { voteId: data.id } });
+  });
 };
 
-exports.getVoteAnalytics = async (req, res) => {
-  try {
-    // Implement the logic to fetch vote analytics
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
+// Fetch all votes for a specific poll
+exports.getVotesForPoll = async (req, res) => {
+  const pollId = req.params.pollId;
+  
+  // Call a method from the model to get votes for the poll
+  Vote.getVotesForPoll(pollId, (err, votes) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Error fetching votes', error: err });
+    }
+    res.status(200).json({ success: true, data: { votes } });
+  });
 };
