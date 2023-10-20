@@ -29,7 +29,7 @@ To get started with the Polling Application API, follow the steps below:
 3. Set up your MySQL database with the provided schema and seed data scripts.
 4. Configure your environment variables in a `.env` file.
 5. Run the application with `npm start`.
-
+```
 
 
 
