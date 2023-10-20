@@ -29,7 +29,19 @@ To get started with the Polling Application API, follow the steps below:
 3. Set up your MySQL database with the provided schema and seed data scripts.
 4. Configure your environment variables in a `.env` file.
 5. Run the application with `npm start`.
+## Sample ENV FILE
 
+```env
+PORT=5000
+HOST=localhost
+USER= your_username
+PASSWORD= your_password
+DATABASE= your_database_name
+```
+
+This sample `.env` file includes environment variables for configuring your application's port, database connection details (host, user, password, and database name). Make sure to store this file in your project directory, and you can use it to configure your application's environment variables.
+
+Please note that it's important to keep your `.env` file secure and not include it in version control systems like Git to protect sensitive information such as database passwords.
 ## Endpoints
 
 ### Create a Poll
