@@ -8,7 +8,7 @@ const pollRoutes = require('./routes/pollRoutes');
 const voteRoutes = require('./routes/voteRoutes')
 const userRoutes = require('./routes/userRoutes');
 const questionRoutes = require('./routes/QuestionRoutes');
-const optionsRoutes = require('./routes/QuestionRoutes');
+const optionsRoutes = require('./routes/optionsRoutes');
 
 app.use(express.json());
 app.use(bodyParser.json());

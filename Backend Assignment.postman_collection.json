@@ -219,8 +219,29 @@
 				{
 					"name": "Create Question",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"poll_id\": 1,\r\n  \"question_text\": \"What is your favorite color?\",\r\n  \"question_type\": \"single\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/questions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"questions"
+							]
+						}
 					},
 					"response": []
 				}
@@ -314,6 +335,22 @@
 			"item": [
 				{
 					"name": "create vote",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get votes for poll",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get votes for user",
 					"request": {
 						"method": "GET",
 						"header": []

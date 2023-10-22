@@ -2,7 +2,7 @@ const Question = require('../models/Question');
 
 // Create a new question
 exports.createQuestion = (req, res) => {
-  if (!req.body.poll_id || !req.body.question_text || !req.body.question_type || !req.body.options) {
+  if (!req.body.poll_id || !req.body.question_text || !req.body.question_type ) {
     return res.status(400).json({ success: false, message: 'All fields are required' });
   }
 
@@ -10,7 +10,6 @@ exports.createQuestion = (req, res) => {
     poll_id: req.body.poll_id,
     question_text: req.body.question_text,
     question_type: req.body.question_type,
-    options: req.body.options
   });
 
   Question.create(newQuestion, (err, data) => {

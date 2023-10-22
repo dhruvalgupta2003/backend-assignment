@@ -1,24 +1,20 @@
 const sql = require('../db/db');
 
 const Question = function (question) {
-  this.pollId = question.pollId;
-  this.questionText = question.questionText;
-  this.questionType = question.questionType;
-  this.options = question.options;
+  this.poll_id = question.poll_id;
+  this.question_text = question.question_text;
+  this.question_type = question.question_type;
 };
 
 Question.create = (newQuestion, result) => {
-  sql.query(
-    'INSERT INTO questions (poll_id, question_text, question_type) VALUES (?, ?, ?)',
-    [newQuestion.pollId, newQuestion.questionText, newQuestion.questionType],
-    (err, res) => {
-      if (err) {
-        result(err, null);
-        return;
-      }
-      result(null, { id: res.insertId });
+  sql.query('INSERT INTO questions SET ?', newQuestion, (err, res) => {
+    if (err) {
+      result(err, null);
+      return;
     }
-  );
+
+    result(null, { id: res.insertId, ...newQuestion });
+  });
 };
 
 Question.getQuestionSetsForPoll = (pollId, result) => {

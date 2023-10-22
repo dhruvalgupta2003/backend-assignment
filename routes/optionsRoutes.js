@@ -5,7 +5,7 @@ const router = express.Router();
 const optionController = require('../controllers/optionsController');
 
 // Create a new option
-router.post('/', optionController.createOption);
+router.post('/options', optionController.createOption);
 
 // Add more routes for updating, deleting, or retrieving options if needed
 
