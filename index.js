@@ -8,6 +8,7 @@ const pollRoutes = require('./routes/pollRoutes');
 const voteRoutes = require('./routes/voteRoutes')
 const userRoutes = require('./routes/userRoutes');
 const questionRoutes = require('./routes/QuestionRoutes');
+const optionsRoutes = require('./routes/QuestionRoutes');
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -35,3 +36,4 @@ app.use('/api', pollRoutes);
 app.use('/api',voteRoutes);
 app.use('/api',userRoutes);
 app.use('/api',questionRoutes);
+app.use('/api',optionsRoutes);

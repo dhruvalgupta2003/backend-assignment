@@ -183,6 +183,40 @@
 			"name": "Question",
 			"item": [
 				{
+					"name": "options",
+					"item": [
+						{
+							"name": "add options",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"question_id\": 1,  \r\n  \"options\": [\"Option 1\", \"Option 2\", \"Option 3\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/options",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"options"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Create Question",
 					"request": {
 						"method": "GET",

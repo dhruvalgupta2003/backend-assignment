@@ -44,46 +44,6 @@ const addQuestionSet = (req, res) => {
 };
 
 
-// Fetch all created polls with additional information
-// exports.getAllPolls = async (req, res) => {
-//     try {
-//       // Get a list of all polls
-//       const polls = await Poll.getAll();
-  
-//       // Define an array to store the detailed poll information
-//       const detailedPolls = [];
-  
-//       // Iterate through each poll to gather additional information
-//       for (const poll of polls) {
-//         // Get the total number of votes for the poll
-//         const totalVotes = await Vote.getVotesForPoll(poll.id);
-  
-//         // Get the number of question sets in the poll
-//         const questionSets = await Question.getQuestionSetsForPoll(poll.id);
-  
-//         // Get details of at least one question from the poll
-//         const question = await Question.getFirstQuestionForPoll(poll.id);
-  
-//         // Add the detailed poll information to the array
-//         detailedPolls.push({
-//           id: poll.id,
-//           title: poll.title,
-//           category: poll.category,
-//           start_date: poll.start_date,
-//           end_date: poll.end_date,
-//           total_votes: totalVotes,
-//           question_sets_count: questionSets.length,
-//           first_question: question,
-//         });
-//       }
-  
-//       // Respond with the detailed poll information
-//       res.status(200).json({ polls: detailedPolls });
-//     } catch (error) {
-//       res.status(500).json({ error: 'Internal server error' });
-//     }
-//   };
-
 exports.getAllPolls = async (req, res) => {
   try {
     // Get a list of all polls
@@ -208,10 +168,28 @@ exports.submitPoll = async (req, res) => {
     const { userId } = req.params;
     const { pollId, questionId, optionId } = req.body;
 
-    await Vote.create(userId, pollId, questionId, optionId);
-    const reward = calculateReward(); // Implement your reward calculation logic
+    // Create a new Vote object
+    const newVote = new Vote({
+      user_id: userId,
+      poll_id: pollId,
+      question_id: questionId,
+      option_id: optionId,
+    });
+    
+    await Vote.create(newVote);
 
-    res.status(200).json({ reward });
+    // Retrieve the Poll's min_reward and max_reward based on the pollId
+    const poll = await Poll.findById(pollId);
+    if (!poll) {
+      return res.status(404).json({ error: 'Poll not found' });
+    }
+    // Calculate the reward
+    // const minReward = poll.min_reward;
+    // const maxReward = poll.max_reward;
+
+    // const reward = calculateReward(minReward, maxReward);
+
+    res.status(200).json({ data: newVote });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
