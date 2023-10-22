@@ -6,6 +6,5 @@ const questionController = require('../controllers/questionController');
 router.post('/questions', questionController.createQuestion);
 
 // Fetch all questions for a specific poll
-router.get('/polls/:pollId/questions', questionController.getQuestionsForPoll);
-
+// router.get('/polls/:pollId/questions', questionController.getQuestionsForPoll);
 module.exports = router;

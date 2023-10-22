@@ -1,20 +1,18 @@
-const Question = require('./question.model');
+const Question = require('../models/Question');
 
 // Create a new question
 exports.createQuestion = (req, res) => {
-  // Check if the request body contains the required fields
-  if (!req.body.pollId || !req.body.questionText || !req.body.questionType) {
+  if (!req.body.poll_id || !req.body.question_text || !req.body.question_type || !req.body.options) {
     return res.status(400).json({ success: false, message: 'All fields are required' });
   }
 
-  // Create a new question object
   const newQuestion = new Question({
-    pollId: req.body.pollId,
-    questionText: req.body.questionText,
-    questionType: req.body.questionType,
+    poll_id: req.body.poll_id,
+    question_text: req.body.question_text,
+    question_type: req.body.question_type,
+    options: req.body.options
   });
 
-  // Call the create method from the model
   Question.create(newQuestion, (err, data) => {
     if (err) {
       return res.status(500).json({ success: false, message: 'Error creating question', error: err });

@@ -4,6 +4,7 @@ const Question = function (question) {
   this.pollId = question.pollId;
   this.questionText = question.questionText;
   this.questionType = question.questionType;
+  this.options = question.options;
 };
 
 Question.create = (newQuestion, result) => {

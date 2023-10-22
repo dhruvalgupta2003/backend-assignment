@@ -3,15 +3,16 @@ const Vote = require('../models/Vote'); // Import the Vote model
 // Create a new vote
 exports.createVote = async (req, res) => {
   // Check if the request body contains the required fields
-  if (!req.body.pollId || !req.body.userId || req.body.vote === undefined) {
+  if (!req.body.pollId || !req.body.userId || !req.body.questionId || !req.body.optionId) {
     return res.status(400).json({ success: false, message: 'All fields are required' });
   }
   
   // Create a new vote object
   const newVote = new Vote({
-    pollId: req.body.pollId,
-    userId: req.body.userId,
-    vote: req.body.vote,
+    user_id: req.body.userId,
+    poll_id: req.body.pollId,
+    question_id: req.body.questionId,
+    option_id: req.body.optionId,
   });
 
   // Call the create method from the model

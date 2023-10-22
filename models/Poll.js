@@ -17,7 +17,6 @@ Poll.create = (newPoll, result) => {
       return;
     }
 
-    // console.log('created poll: ', { id: res.insertId, ...newPoll });
     result(null, { id: res.insertId, ...newPoll });
   });
 };
@@ -79,6 +78,25 @@ Poll.updateById = (id, poll, result) => {
       result(null, { id: id, ...poll });
     }
   );
+};
+
+Poll.getAvailableUserPolls = (userId, startDate, endDate, result) => {
+  
+  let query = 'SELECT * FROM polls WHERE id NOT IN (SELECT poll_id FROM votes WHERE user_id = ?)';
+  
+  if (startDate && endDate) {
+    query += ' AND start_date >= ? AND end_date <= ?';
+  }
+  
+  sql.query(query, [userId, startDate, endDate], (err, res) => {
+    if (err) {
+      console.log('error: ', err);
+      result(err, null);
+      return;
+    }
+
+    result(null, res);
+  });
 };
 
 Poll.remove = (id, result) => {
